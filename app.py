@@ -1,3 +1,4 @@
+
 import streamlit as st
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -42,35 +43,20 @@ def get_vector_store(text_chunks):
     
 
 def get_conversational_chain():
+
     prompt_template = """
-    You are an AI-powered study assistant designed to help students learn from PDFs in a friendly and interactive way.  
-    Your goal is to provide *clear, engaging, and structured answers* while keeping the conversation fun and informative.  
-    Follow these rules when responding:
+    Answer the question as detailed as possible from the provided context, make sure to provide all the details, if the answer is not in
+    provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
+    Context:\n {context}?\n
+    Question: \n{question}\n
 
-    🎯 *Make it Conversational:* Start with a friendly acknowledgment like "Great question!" or "Interesting topic!"  
-    🎯 *Explain in a Simple & Engaging Way:* Break down complex topics into *easy-to-understand steps.*  
-    🎯 *Encourage Curiosity:* Ask a follow-up question at the end like:  
-        - "Does this make sense?"  
-        - "Would you like a real-world example?"  
-        - "Want me to summarize this in one sentence?"  
-    🎯 *Use Examples & Analogies:* Relate technical topics to *real-life scenarios* to make learning fun.  
-    🎯 *Summarize the Answer:* If the response is long, provide a *quick summary at the end.*  
-    🎯 *If the answer is not available in the document:* Say  
-        "I couldn’t find the exact answer, but here’s what I found that might help!"  
-
-    ---
-    📖 *Context from the document:*  
-    {context}
-
-    ❓ *Student's Question:*  
-    {question}
-
-    📝 *AI's Response (Interactive, engaging, and structured):*
+    Answer:
     """
 
-    model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.3, max_tokens=1500)
+    model = ChatGoogleGenerativeAI(model="gemini-pro",
+                             temperature=0.3)
 
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+    prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
 
     return chain
