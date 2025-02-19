@@ -76,5 +76,4 @@ def main():
                 st.success("Done")
 
 if __name__ == "__main__":
-    # Your Streamlit app code here
-    st.write("Streamlit app is running!")
+    main()
