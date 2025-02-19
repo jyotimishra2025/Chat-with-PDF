@@ -93,5 +93,5 @@ def main():
                         get_vector_store(text_chunks)
                         st.success("✅ Processing complete! Now ask your question.")
 
-if _name_ == "_main_":
+if __name__ == "_main_":
     main()
