@@ -75,5 +75,5 @@ def main():
                 get_vector_store(text_chunks)
                 st.success("Done")
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
