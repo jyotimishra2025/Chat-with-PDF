@@ -81,7 +81,7 @@ def user_input(user_question):
 
 def main():
     st.set_page_config("Chat PDF")
-    st.header("Chat with PDF using Gemini💁")
+    st.header("Chat with PDF using GenAI💁")
 
     user_question = st.text_input("Ask a Question from the PDF Files")
 
@@ -98,24 +98,7 @@ def main():
                 get_vector_store(text_chunks)
                 st.success("Done")
 
-option = st.radio(
-    label = "Select Your chapter",
-    options = ("chapter 1","chapter 2","chapter 3","chapter 4","chapter 5","chapter 6","chapter 7")
-)
-if option == "chapter 1":
-    st.write("You Selected Chapter 1")
-elif option == "chapter 2":
-    st.write("You Selected Chapter 2")
-elif option == "chapter 3":
-    st.write("You Selected Chapter 3")
-elif option == "chapter 4":
-    st.write("You Selected Chapter 4")
-elif option == "chapter 5":
-    st.write("You Selected Chapter 5")
-elif option == "chapter 6":
-    st.write("You Selected Chapter 6")
-elif option == "chapter 7":
-    st.write("You Selected Chapter 7")
+
 
 
 if __name__ == "__main__":
