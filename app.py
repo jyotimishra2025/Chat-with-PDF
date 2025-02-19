@@ -19,7 +19,7 @@ def get_pdf_text(selected_pdfs):
     for pdf in selected_pdfs:
         pdf_reader = PdfReader(pdf)
         for page in pdf_reader.pages:
-            text += page.extract_text()
+            text += page.extract_text() if page.extract_text() else ""
     return text
 
 def get_text_chunks(text):
@@ -69,26 +69,29 @@ def main():
 
     with st.sidebar:
         st.title("📂 Upload & Select PDFs")
-        pdf_docs = st.file_uploader("Upload up to 5 PDF Files", accept_multiple_files=True)
+        pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True)
 
         selected_pdfs = []
+        check_states = {}
+
         if pdf_docs:
             st.subheader("✅ Select PDFs to Process")
-            check_states = {}
             for pdf in pdf_docs:
-                check_states[pdf.name] = st.checkbox(pdf.name, value=True)
-            
-            selected_pdfs = [pdf for pdf in pdf_docs if check_states[pdf.name]]
+                check_states[pdf.name] = st.checkbox(pdf.name, value=False)
 
-        if st.button("Submit & Process"):
-            if len(selected_pdfs) == 0:
-                st.warning("⚠ Please select at least one PDF!")
-            else:
-                with st.spinner("🔄 Processing selected PDFs..."):
-                    raw_text = get_pdf_text(selected_pdfs)
-                    text_chunks = get_text_chunks(raw_text)
-                    get_vector_store(text_chunks)
-                    st.success("✅ Processing complete! Now ask your question.")
+            # Process button
+            if st.button("Submit & Process"):
+                selected_pdfs = [pdf for pdf in pdf_docs if check_states[pdf.name]]
+
+                if not selected_pdfs:
+                    st.warning("⚠ Please select at least one PDF!")
+                else:
+                    st.write(f"🔍 *Processing files:* {', '.join([pdf.name for pdf in selected_pdfs])}")  # Debugging info
+                    with st.spinner("🔄 Processing selected PDFs..."):
+                        raw_text = get_pdf_text(selected_pdfs)
+                        text_chunks = get_text_chunks(raw_text)
+                        get_vector_store(text_chunks)
+                        st.success("✅ Processing complete! Now ask your question.")
 
 if _name_ == "_main_":
     main()
