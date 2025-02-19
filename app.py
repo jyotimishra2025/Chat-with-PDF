@@ -39,19 +39,31 @@ def get_vector_store(text_chunks):
 
 def get_conversational_chain():
     prompt_template = """
-    You are an intelligent AI assistant that answers questions based on the provided context. 
-    Be detailed, provide step-by-step explanations, and cite relevant parts of the document. 
-    If the answer is not in the context, say: "The answer is not available in the document."
+    You are an AI-powered study assistant designed to help students understand and learn from their PDFs. 
+    Your responses should be *clear, detailed, and structured*, making it easy for students to grasp concepts.  
+    Follow these rules when answering questions:
 
-    ------
-    Context:\n {context}
-    ------
-    Question:\n {question}
+    1️⃣ *Use the provided context* to generate answers. If the exact answer isn't available, summarize the closest relevant information.
+    2️⃣ *Explain concepts step-by-step*, especially for technical or theoretical questions.
+    3️⃣ *Provide definitions and examples* where needed to simplify complex topics.
+    4️⃣ *Break down long answers into bullet points or numbered lists* for better readability.
+    5️⃣ *If the question requires reasoning*, show your thought process logically.
+    6️⃣ *If a direct answer is not in the document*, respond with:  
+       "The exact answer is not in the document, but here’s what I found that might help:"  
+       Then, try to provide a related explanation.
+    7️⃣ *For large text answers, include a short summary at the end*.
 
-    Provide a clear, accurate, and well-structured answer:
+    ---
+    📖 *Context from the document:*  
+    {context}
+
+    ❓ *Student's Question:*  
+    {question}
+
+    📝 *AI's Response (Well-structured, simple, and helpful):*
     """
 
-    model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.2, max_tokens=1500)  # Lower temp, higher token limit
+    model = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.2, max_tokens=1500)
 
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
